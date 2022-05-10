@@ -1,0 +1,132 @@
+﻿<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+      xmlns:local="clr-namespace:NASA_PL.Views"
+      xmlns:materialDesignMahApps="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      x:Class="NASA_PL.Views.PlanetsView"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="PlanetsView">
+
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <syncfusion:Carousel x:Name="PlanetsCarousel"
+                             RotationSpeed="300"
+                             ItemsPerPage="8"
+                             VisualMode="Standard"
+                             OpacityFraction="0.9"
+                             RadiusX="375"
+                             RadiusY="-150"
+                             OpacityEnabled="True"
+                             ScalingEnabled="True"
+                             Grid.Row="1"
+                             SelectedIndexChanged="PlanetsCarousel_OnSelectedIndexChanged">
+
+            <syncfusion:CarouselItem Name="MercuryCarouselItem">
+                <Viewbox Width="80">
+                    <Image Source="/Media/Planets/Mercury.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+            <syncfusion:CarouselItem Name="VenusCarouselItem">
+                <Viewbox Width="150">
+                    <Image Source="/Media/Planets/Venus.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+            <syncfusion:CarouselItem Name="EarthCarouselItem">
+                <Viewbox Width="150">
+                    <Image Source="/Media/Planets/Earth.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+            <syncfusion:CarouselItem Name="MarsCarouselItem">
+                <Viewbox Width="100">
+                    <Image Source="/Media/Planets/Mars.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+            <syncfusion:CarouselItem Name="JupiterCarouselItem">
+                <Viewbox Width="300">
+                    <Image Source="/Media/Planets/Jupiter.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+            <syncfusion:CarouselItem Name="SaturnCarouselItem">
+                <Viewbox Width="500">
+                    <Image Source="/Media/Planets/Saturn.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+            <syncfusion:CarouselItem Name="UranusCarouselItem">
+                <Viewbox Width="200">
+                    <Image Source="/Media/Planets/Uranus.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+            <syncfusion:CarouselItem Name="NeptuneCarouselItem">
+                <Viewbox Width="180">
+                    <Image Source="/Media/Planets/Neptune.png" />
+                </Viewbox>
+            </syncfusion:CarouselItem>
+
+        </syncfusion:Carousel>
+
+        <StackPanel Grid.Row="0"
+                    Margin="0 30 0 0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Label Name="PlanetName"
+                   Content="Mercury"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="50"
+                   Foreground="White"
+                   FontWeight="Bold" />
+
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                    Margin="10 0 "
+                    Command="{Binding OpenPlanetCardCommand }"
+                    CommandParameter="{Binding ElementName=PlanetsCarousel}">
+                <materialDesignMahApps:PackIcon Kind="InfoCircle" />
+            </Button>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0 60 0 0">
+
+            <Button Command="{Binding MovePlanetLeftCommand }"
+                    CommandParameter="{Binding ElementName=PlanetsCarousel}"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                    Margin="0 0 10 0">
+                <materialDesignMahApps:PackIcon Kind="ArrowLeftBold" />
+            </Button>
+
+            <Button Command="{Binding MovePlanetRightCommand }"
+                    CommandParameter="{Binding ElementName=PlanetsCarousel}"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                    Margin="10 0 0 0">
+                <materialDesignMahApps:PackIcon Kind="ArrowRightBold" />
+            </Button>
+
+
+        </StackPanel>
+
+    </Grid>
+
+
+</Page>

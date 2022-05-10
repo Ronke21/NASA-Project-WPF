@@ -1,0 +1,202 @@
+﻿<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:system="clr-namespace:System;assembly=mscorlib"
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:viewModels="clr-namespace:NASA_PL.ViewModels"
+      xmlns:converters="clr-namespace:NASA_PL.Converters"
+      x:Class="NASA_PL.Views.SearchView"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="1000"
+      Title="Search"
+      Foreground="White">
+
+    <Page.Resources>
+        <converters:DictToVisibilityConverter x:Key="DictToVisibilityConverter" />
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="8*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+
+            <TextBox Name="QueryStringText"
+                     Foreground="White"
+                     VerticalContentAlignment="Center"
+                     materialDesign:HintAssist.Hint="Search pictures and videos in NASA"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Top"
+                     FontSize="25"
+                     KeyDown="QueryStringText_OnKeyDown"
+                     materialDesign:HintAssist.IsFloating="True"
+                     materialDesign:HintAssist.Foreground="White"
+                     Margin="20 0">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="TextChanged">
+                        <b:InvokeCommandAction Command="{Binding UpdateQueryStringCommand}"
+                                               CommandParameter="{Binding ElementName=QueryStringText}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </TextBox>
+
+            <Slider Style="{StaticResource MaterialDesignDiscreteSlider}"
+                    Name="ConfidenceSlider"
+                    VerticalAlignment="Center"
+                    Minimum="0"
+                    Maximum="98"
+                    Width="200"
+                    TickFrequency="5"
+                    Margin="20 0"
+                    TickPlacement="Both">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="ValueChanged">
+                        <b:InvokeCommandAction Command="{Binding UpdateConfidenceCommand}"
+                                               CommandParameter="{Binding ElementName=ConfidenceSlider}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Slider>
+
+            <TextBlock Text="{Binding ElementName=ConfidenceSlider, Path=Value, StringFormat=confidence : {0}%}"
+                       VerticalAlignment="Center"
+                       FontSize="20" />
+
+            <Button x:Name="btSearch"
+                    Margin="20 0"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                    Command="{Binding SearchCommand}">
+                <materialDesign:PackIcon Kind="Search" />
+            </Button>
+
+        </StackPanel>
+
+        <Grid Margin="10"
+              Grid.Row="1">
+
+            <Grid>
+
+                <ProgressBar Name="ImageLoadingProgressBar"
+                             IsIndeterminate="True"
+                             Style="{StaticResource MaterialDesignCircularProgressBar}"
+                             Width="150"
+                             Height="150"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"
+                             Visibility="{Binding ResultsDictionary, Converter={StaticResource DictToVisibilityConverter}}">
+                </ProgressBar>
+
+                <ListBox Name="SearchListBox"
+                         Visibility="{Binding ShowList}"
+                         ItemsSource="{Binding ResultsDictionary }">
+
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin"
+                                    Value="5" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBox.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <materialDesign:Card Name="Card"
+                                                 Width="225"
+                                                 Height="300"
+                                                 UniformCornerRadius="5">
+
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1.5*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <Image x:Name="ListImage"
+                                           Source="{Binding Path=Key}"
+                                           Stretch="Uniform"
+                                           Grid.Row="0"
+                                           Margin="0 10 0 0"
+                                           ToolTipService.InitialShowDelay="1000">
+
+                                        <Image.ToolTip>
+                                            <ToolTip Placement="Center">
+                                                <Image Source="{Binding Path=Key}"
+                                                       MaxHeight="500"
+                                                       MaxWidth="500" />
+                                            </ToolTip>
+                                        </Image.ToolTip>
+
+                                    </Image>
+
+                                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom"
+                                            Grid.Row="0"
+                                            Height="40"
+                                            Width="40"
+                                            Command="{Binding DataContext.UploadImageToFireBaseCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                            CommandParameter="{Binding Key}"
+                                            ToolTip="save image to Firebase"
+                                            Margin="10 -15">
+                                        <materialDesign:PackIcon Kind="ContentSave" />
+                                    </Button>
+
+                                    <ScrollViewer Grid.Row="1"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  Margin="20">
+
+                                        <ScrollViewer.Resources>
+                                            <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">5</system:Double>
+                                        </ScrollViewer.Resources>
+
+                                        <TextBox Name="TextBox"
+                                                 TextWrapping="Wrap"
+                                                 VerticalAlignment="Center"
+                                                 Text="{Binding Path=Value, Mode=OneWay}"
+                                                 TextAlignment="Justify"
+                                                 IsReadOnly="True">
+
+                                            <TextBox.ToolTip>
+                                                <ToolTip Placement="Center">
+                                                    <TextBlock Text="{Binding Path=Value, Mode=OneWay}"
+                                                               TextWrapping="Wrap"
+                                                               MaxWidth="300"
+                                                               FontSize="18"
+                                                               TextAlignment="Justify" />
+                                                </ToolTip>
+                                            </TextBox.ToolTip>
+
+                                        </TextBox>
+
+                                    </ScrollViewer>
+
+                                </Grid>
+
+                            </materialDesign:Card>
+
+                        </DataTemplate>
+
+                    </ListBox.ItemTemplate>
+
+                </ListBox>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+
+</Page>

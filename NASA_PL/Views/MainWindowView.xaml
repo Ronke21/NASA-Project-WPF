@@ -1,0 +1,401 @@
+﻿<Window x:Class="NASA_PL.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="NasaProject"
+        WindowStyle="None"
+        Height="750"
+        Width="1200"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip"
+        AllowsTransparency="True"
+        Name="MainWindow"
+        Icon="../Media/StarIcon.png"
+        MinHeight="550"
+        MinWidth="750"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+
+    <Window.Resources>
+
+        <Storyboard x:Key="OpenMenu">
+
+            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                From="-210,0,0,0"
+                                To="0,0,0,0"
+                                DecelerationRatio="0.9"
+                                Duration="0:0:0.3" />
+
+        </Storyboard>
+
+        <Storyboard x:Key="CloseMenu">
+
+            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                From="0,0,0,0"
+                                To="-210,0,0,0"
+                                DecelerationRatio="0.9"
+                                Duration="0:0:0.3" />
+
+        </Storyboard>
+
+    </Window.Resources>
+
+
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="90" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Frame x:Name="DataDisplay"
+               Grid.Column="1"
+               Grid.Row="1"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
+               Margin="10,0,10,10"
+               NavigationUIVisibility="Hidden" />
+
+        <DockPanel Grid.Column="1"
+                   Grid.Row="0"
+                   LastChildFill="True"
+                   Background="#532782"
+                   MouseDown="Drag_OnMouseDown">
+
+            <!--Exit button-->
+            <Button Name="Exit"
+                    Width="70"
+                    Height="50"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    DockPanel.Dock="Right"
+                    BorderThickness="0"
+                    Command="{Binding CloseWindowCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=MainWindow}">
+
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background"
+                                Value="#E81123" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#F1707A" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
+                <materialDesign:PackIcon Kind="WindowClose"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Foreground="White"
+                                         Height="30"
+                                         Width="30" />
+
+            </Button>
+            <!--Restore button-->
+            <Button Name="Restore"
+                    Width="70"
+                    Height="50"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    DockPanel.Dock="Right"
+                    BorderThickness="0"
+                    Command="{Binding RestoreWindowCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=MainWindow}">
+
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#572e85" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
+
+                <materialDesign:PackIcon Kind="WindowRestore"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Foreground="White"
+                                         Height="30"
+                                         Width="30" />
+            </Button>
+            <!--Minimize button-->
+            <Button Name="Minimize"
+                    Width="70"
+                    Height="50"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    BorderBrush="Transparent"
+                    DockPanel.Dock="Right"
+                    Command="{Binding MinimizeWindowCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=MainWindow}">
+
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#572e85" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
+                <materialDesign:PackIcon Kind="WindowMinimize"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Foreground="White"
+                                         Height="30"
+                                         Width="30" />
+            </Button>
+
+        </DockPanel>
+
+        <!--Side panel-->
+        <StackPanel x:Name="SideBar"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Background="#3d1865"
+                    Width="300"
+                    HorizontalAlignment="Left">
+
+            <!--Open close Button-->
+            <DockPanel Margin="0 0 0 25">
+                <Button Name="InfoButton"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        Width="90"
+                        Height="80"
+                        BorderBrush="Transparent"
+                        Command="{Binding OpenInfoWindowCommand, Mode=OneWay}">
+                    <materialDesign:PackIcon Foreground="White"
+                                             Kind="InformationOutline"
+                                             Height="50"
+                                             Width="50" />
+                </Button>
+                <Button VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        Width="90"
+                        Height="80"
+                        BorderBrush="Transparent"
+                        Click="ButtonBase_OnClick">
+
+                    <materialDesign:PackIcon Name="OpenCloseButtonIcon"
+                                             Foreground="White"
+                                             Kind="MenuOpen"
+                                             Height="50"
+                                             Width="50" />
+
+                </Button>
+            </DockPanel>
+
+
+            <Button Name="APODSidePanel"
+                    Style="{StaticResource SidePanelButton}"
+                    ToolTip="Astronomy Picture Of the Day"
+                    Click="SideBarButton_OnClick"
+                    Command="{Binding OpenApodPageCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=DataDisplay}">
+
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock Name="APOD"
+                               Text="APOD"
+                               FontSize="30"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               Margin="5 5 0 5" />
+
+                    <materialDesign:PackIcon Foreground="White"
+                                             Kind="Image"
+                                             Height="50"
+                                             Width="50"
+                                             Margin="125 0 0 0" />
+
+                </StackPanel>
+
+            </Button>
+
+            <Button Name="PlanetProfileSidePanel"
+                    Style="{StaticResource SidePanelButton}"
+                    ToolTip="Planet Profile"
+                    Command="{Binding OpenPlanetsPageCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=DataDisplay}"
+                    Click="SideBarButton_OnClick">
+
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock Name="PlanetProfile"
+                               Text="Planets"
+                               FontSize="30"
+                               Foreground="White"
+                               Margin="5 5 0 5" />
+
+                    <materialDesign:PackIcon Foreground="White"
+                                             Kind="Planet"
+                                             Height="50"
+                                             Width="50"
+                                             Margin="105 0 0 0" />
+
+                </StackPanel>
+
+            </Button>
+
+            <Button Name="SearchImagesSidePanel"
+                    Style="{StaticResource SidePanelButton}"
+                    ToolTip="Search Images"
+                    Command="{Binding OpenSearchPageCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=DataDisplay}"
+                    Click="SideBarButton_OnClick">
+
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock Name="SearchImages"
+                               Text="Search"
+                               FontSize="30"
+                               Foreground="White"
+                               Margin="5 5 0 5" />
+
+                    <materialDesign:PackIcon Foreground="White"
+                                             Kind="SearchGlobe"
+                                             Height="50"
+                                             Width="50"
+                                             Margin="115 0 0 0" />
+
+                </StackPanel>
+
+            </Button>
+
+            <Button Name="NeosSidePanel"
+                    Style="{StaticResource SidePanelButton}"
+                    Command="{Binding OpenNeosPageCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=DataDisplay}"
+                    Click="SideBarButton_OnClick">
+
+                <Button.ToolTip>
+                    <ToolTip>
+                        Near Earth Objects
+                    </ToolTip>
+                </Button.ToolTip>
+
+
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock x:Name="NeosTB"
+                               FontSize="30"
+                               Foreground="White"
+                               Text="NEOs"
+                               Margin="5 5 0 5" />
+
+
+                    <materialDesign:PackIcon Foreground="White"
+                                             Kind="StarShooting"
+                                             Height="50"
+                                             Width="50"
+                                             Margin="130 0 0 0" />
+
+                </StackPanel>
+
+            </Button>
+
+
+            <Button Name="FireBaseSidePanel"
+                    Style="{StaticResource SidePanelButton}"
+                    Command="{Binding OpenFireBasePageCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=DataDisplay}"
+                    Click="SideBarButton_OnClick">
+
+                <Button.ToolTip>
+                    <ToolTip>
+                        Fire base images
+                    </ToolTip>
+                </Button.ToolTip>
+
+
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock x:Name="FBTextBlock"
+                               FontSize="30"
+                               Foreground="White"
+                               Text="Firebase"
+                               Margin="5 5 0 5" />
+
+
+                    <materialDesign:PackIcon Foreground="White"
+                                             Kind="Firebase"
+                                             Height="50"
+                                             Width="50"
+                                             Margin="90 0 0 0" />
+
+                </StackPanel>
+
+            </Button>
+
+
+        </StackPanel>
+
+    </Grid>
+
+
+</Window>
+
+
+
