@@ -3,7 +3,6 @@ The sky in search of meeting planets through projects such as Kepler and Tess ha
 The keys to human science analysis and decipherment are therefore improved tools for display and analysis.
 In this project we will allow the search and visualization of planetary data originating from databases accessible via the API Web, in order to
  focus efforts we will deal with the data of planets and objects that are in "our" solar system.
-The project contains:
 
 Main technologies:
 - C# and WPF
